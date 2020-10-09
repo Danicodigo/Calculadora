@@ -1,11 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package calculadora;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
@@ -20,144 +17,139 @@ import javax.swing.border.EmptyBorder;
 
 public class Calculadora extends JFrame {
 
-	/**
-	 * generado
-	 */
-	private static final long serialVersionUID = 1583724102189855698L;
+    JTextField panelTexto;
+    double resultado;
+    String operacion;
+    JPanel panelNumeros, panelOperaciones, panel;
+    boolean nuevaOperacion = true;
 
-	JTextField pantalla;
-	double resultado;
-	String operacion;
-	JPanel panelNumeros, panelOperaciones,panel;
-	boolean nuevaOperacion = true;
+    public Calculadora() {
+        super();
+        setSize(300, 400);
+        setTitle("Calculadora Simple");
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
-	public Calculadora() {
-		super();
-		setSize(250, 300);
-		setTitle("Calculadora Simple");
-		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		setResizable(false);
+        // Vamos a dibujar sobre el panel
+        panel = (JPanel) this.getContentPane();
+        panel.setLayout(new BorderLayout());
 
-		// Vamos a dibujar sobre el panel
-		panel = (JPanel) this.getContentPane();
-		panel.setLayout(new BorderLayout());
+        panelTexto = new JTextField("0", 20);
+        //Coloca el texto a la derecha
+        panelTexto.setHorizontalAlignment(JTextField.RIGHT);
+        panelTexto.setFont(new Font("Calibri", 1, 20));
+        panelTexto.setEditable(false);
+        //Posiciona el panel arriba
+        panel.add("North", panelTexto);
 
-		pantalla = new JTextField("0",20);
-                //Coloca el texto a la derecha
-		pantalla.setHorizontalAlignment(JTextField.RIGHT);
-		pantalla.setEditable(false);
-                //Posiciona el panel arriba
-		panel.add("North", pantalla);
+        panelNumeros = new JPanel();
+        panelNumeros.setLayout(new GridLayout(4, 3));
+        //Cambiar el tamaño de los bordes
+        panelNumeros.setBorder(new EmptyBorder(5, 5, 5, 5));
+//
+//private void botonPulsado(java.awt.ActionEvent evt){
+//    getCampo().setText("");
+//}
+        for (int i = 9; i >= 0; i--) {
+            JButton btn = new JButton();
+            btn.setText(i + "");
+            btn.addMouseListener(new MouseAdapter() {
 
-		panelNumeros = new JPanel();
-		panelNumeros.setLayout(new GridLayout(4, 3));
-                //Cambiar el tamaño de los bordes
-		panelNumeros.setBorder(new EmptyBorder(4, 4, 4, 4));
+                @Override
+                public void mouseReleased(MouseEvent evt) {
+                    JButton btn = (JButton) evt.getSource();
+                    numeroPulsado(btn.getText());
+                }
+            });
 
-		for (int i = 9; i >= 0; i--) {
-			JButton btn = new JButton();
-		btn.setText(i+"");
-		btn.addMouseListener(new MouseAdapter() {
+            panelNumeros.add(btn);
+        }
+        JButton btn = new JButton();
+        btn.setText(".");
+        btn.addMouseListener(new MouseAdapter() {
 
-			@Override
-			public void mouseReleased(MouseEvent evt) {
-				JButton btn = (JButton) evt.getSource();
-				numeroPulsado(btn.getText());
-			}
-		});
+            @Override
+            public void mouseReleased(MouseEvent evt) {
+                JButton btn = (JButton) evt.getSource();
+                numeroPulsado(btn.getText());
+            }
+        });
 
-		panelNumeros.add(btn);
-		}
-                JButton btn = new JButton();
-		btn.setText(".");
-		btn.addMouseListener(new MouseAdapter() {
+        panelNumeros.add(btn);
 
-			@Override
-			public void mouseReleased(MouseEvent evt) {
-				JButton btn = (JButton) evt.getSource();
-				numeroPulsado(btn.getText());
-			}
-		});
+        panel.add("Center", panelNumeros);
 
-		panelNumeros.add(btn);
+        panelOperaciones = new JPanel();
+        panelOperaciones.setLayout(new GridLayout(6, 1));
+        panelOperaciones.setBorder(new EmptyBorder(5, 5, 5, 5));
 
-		panel.add("Center", panelNumeros);
+        nuevaOperacion("+");
+        nuevaOperacion("-");
+        nuevaOperacion("X");
+        nuevaOperacion("/");
+        nuevaOperacion("=");
+        nuevaOperacion("CE");
 
-		panelOperaciones = new JPanel();
-		panelOperaciones.setLayout(new GridLayout(6, 1));
-		panelOperaciones.setBorder(new EmptyBorder(4, 4, 4, 4));
+        panel.add("East", panelOperaciones);
 
-		nuevaOperacion("+");
-		nuevaOperacion("-");
-		nuevaOperacion("*");
-		nuevaOperacion("/");
-		nuevaOperacion("=");
-		nuevaOperacion("CE");
+        validate();
+    }
 
-		panel.add("East", panelOperaciones);
+    private void nuevaOperacion(String operacion) {
+        JButton btn = new JButton(operacion);
 
-		validate();
-	}
+        btn.addMouseListener(new MouseAdapter() {
 
-	private void nuevaOperacion(String operacion) {
-		JButton btn = new JButton(operacion);
-		btn.setForeground(Color.RED);
+            @Override
+            public void mouseReleased(MouseEvent evt) {
+                JButton btn = (JButton) evt.getSource();
+                operacionPulsado(btn.getText());
+            }
+        });
 
-		btn.addMouseListener(new MouseAdapter() {
+        panelOperaciones.add(btn);
+    }
 
-			@Override
-			public void mouseReleased(MouseEvent evt) {
-				JButton btn = (JButton) evt.getSource();
-				operacionPulsado(btn.getText());
-			}
-		});
+    private void numeroPulsado(String digito) {
+        if (panelTexto.getText().equals("0") || nuevaOperacion) {
+            panelTexto.setText(digito);
+        } else {
+            panelTexto.setText(panelTexto.getText() + digito);
+        }
+        nuevaOperacion = false;
+    }
 
-		panelOperaciones.add(btn);
-	}
+    private void operacionPulsado(String tecla) {
+        if (tecla.equals("=")) {
+            calcularResultado();
+        } else if (tecla.equals("CE")) {
+            resultado = 0;
+            panelTexto.setText("");
+            nuevaOperacion = true;
+        } else {
+            operacion = tecla;
+            if ((resultado > 0) && !nuevaOperacion) {
+                calcularResultado();
+            } else {
+                resultado = new Double(panelTexto.getText());
+            }
+        }
 
-	private void numeroPulsado(String digito) {
-		if (pantalla.getText().equals("0") || nuevaOperacion) {
-			pantalla.setText(digito);
-		} else {
-			pantalla.setText(pantalla.getText() + digito);
-		}
-		nuevaOperacion = false;
-	}
+        nuevaOperacion = true;
+    }
 
-	
-	private void operacionPulsado(String tecla) {
-		if (tecla.equals("=")) {
-			calcularResultado();
-		} else if (tecla.equals("CE")) {
-			resultado = 0;
-			pantalla.setText("");
-			nuevaOperacion = true;
-		} else {
-			operacion = tecla;
-			if ((resultado > 0) && !nuevaOperacion) {
-				calcularResultado();
-			} else {
-				resultado = new Double(pantalla.getText());
-			}
-		}
+    private void calcularResultado() {
+        if (operacion.equals("+")) {
+            resultado += new Double(panelTexto.getText());
+        } else if (operacion.equals("-")) {
+            resultado -= new Double(panelTexto.getText());
+        } else if (operacion.equals("/")) {
+            resultado /= new Double(panelTexto.getText());
+        } else if (operacion.equals("X")) {
+            resultado *= new Double(panelTexto.getText());
+        }
 
-		nuevaOperacion = true;
-	}
-
-	
-	private void calcularResultado() {
-		if (operacion.equals("+")) {
-			resultado += new Double(pantalla.getText());
-		} else if (operacion.equals("-")) {
-			resultado -= new Double(pantalla.getText());
-		} else if (operacion.equals("/")) {
-			resultado /= new Double(pantalla.getText());
-		} else if (operacion.equals("*")) {
-			resultado *= new Double(pantalla.getText());
-		}
-
-		pantalla.setText("" + resultado);
-		operacion = "";
-	}
+        panelTexto.setText("" + resultado);
+        operacion = "";
+    }
 }
-
