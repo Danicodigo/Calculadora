@@ -18,15 +18,6 @@ import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 
-/**
- * 
- * Interfaz para nuestra calculadora sencilla
- * 
- * @author: $Author: franchux $
- * @version: $Rev: 75 $
- * @date: $Date: 2009-04-14 00:21:18 +0200 (mar 14 de abr de 2009) $ $Id:
- *        VentanaCalculadora.java 75 2009-04-13 22:21:18Z franchux $
- */
 public class Calculadora extends JFrame {
 
 	/**
@@ -34,24 +25,12 @@ public class Calculadora extends JFrame {
 	 */
 	private static final long serialVersionUID = 1583724102189855698L;
 
-	/** numero tecleado */
 	JTextField pantalla;
-
-	/** guarda el resultado de la operacion anterior o el número tecleado */
 	double resultado;
-
-	/** para guardar la operacion a realizar */
 	String operacion;
-
-	/** Los paneles donde colocaremos los botones */
 	JPanel panelNumeros, panelOperaciones,panel;
-
-	/** Indica si estamos iniciando o no una operación */
 	boolean nuevaOperacion = true;
 
-	/**
-	 * Constructor. Crea los botones y componentes de la calculadora
-	 */
 	public Calculadora() {
 		super();
 		setSize(250, 300);
